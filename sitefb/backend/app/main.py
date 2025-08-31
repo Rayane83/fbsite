@@ -37,6 +37,12 @@ app.include_router(dotation_router)
 app.include_router(dashboard_router)
 
 # Minimal health
+app.include_router(enterprises_router)
+app.include_router(tax_router)
+app.include_router(documents_router)
+app.include_router(archive_router)
+app.include_router(blanchiment_router)
+
 @app.get("/api/health")
 def health():
     return {"status": "ok"}
