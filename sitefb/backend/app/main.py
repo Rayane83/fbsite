@@ -21,6 +21,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+from .routers.enterprises import router as enterprises_router
+from .routers.tax import router as tax_router
+from .routers.documents import router as documents_router
+from .routers.archive import router as archive_router
+from .routers.blanchiment import router as blanchiment_router
+
 
 # Ensure tables exist if running without Alembic (dev convenience)
 Base.metadata.create_all(bind=engine)
