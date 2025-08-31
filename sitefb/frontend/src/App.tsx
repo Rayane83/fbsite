@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { AppProvider, useApp } from './context/AppContext'
+import EnterprisesPage from './pages/Enterprises'
+import DocumentsPage from './pages/Documents'
+import ArchivesPage from './pages/Archives'
+import TaxPage from './pages/Tax'
+import BlanchimentPage from './pages/Blanchiment'
+import StaffConfigPage from './pages/StaffConfig'
+import CompanyConfigPage from './pages/CompanyConfig'
 
 const API_BASE = import.meta.env.VITE_API_URL || ''
 
