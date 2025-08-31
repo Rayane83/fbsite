@@ -221,10 +221,19 @@ function Dotations({ entreprise, guildId }: { entreprise: string, guildId: strin
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/dotations" element={<DotationsPage />} />
-    </Routes>
+    <AppProvider>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dotations" element={<DotationsPage />} />
+        <Route path="/entreprises" element={<EnterprisesPage />} />
+        <Route path="/documents" element={<DocumentsPage />} />
+        <Route path="/archives" element={<ArchivesPage />} />
+        <Route path="/impots" element={<TaxPage />} />
+        <Route path="/blanchiment" element={<BlanchimentPage />} />
+        <Route path="/staff-config" element={<StaffConfigPage />} />
+        <Route path="/company-config" element={<CompanyConfigPage />} />
+      </Routes>
+    </AppProvider>
   )
 }
