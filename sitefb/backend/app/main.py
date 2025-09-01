@@ -18,8 +18,10 @@ from .routers.admin import router as admin_router
 
 app = FastAPI(title="Portail Entreprise Flashback Fa")
 
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
-CORS_ORIGINS = os.getenv("CORS_ORIGINS", FRONTEND_URL)
+FRONTEND_URL = os.getenv("FRONTEND_URL")
+CORS_ORIGINS = os.getenv("CORS_ORIGINS")
+if not FRONTEND_URL or not CORS_ORIGINS:
+    raise RuntimeError("FRONTEND_URL and CORS_ORIGINS must be set")
 allow_origins = [o.strip() for o in CORS_ORIGINS.split(",")]
 
 app.add_middleware(

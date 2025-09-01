@@ -5,11 +5,20 @@ import httpx
 from fastapi import Depends, HTTPException, Request
 from jose import jwt
 
-JWT_SECRET = os.getenv("JWT_SECRET", "")
+JWT_SECRET = os.getenv("JWT_SECRET")
+if not JWT_SECRET:
+    raise RuntimeError("JWT_SECRET is not set")
 JWT_ALG = "HS256"
-DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN", "")
-STAFF_ROLE_ID = os.getenv("STAFF_ROLE_ID", "1404608105723068547")  # default to provided
-SUPERADMIN_LIST = [s.strip() for s in os.getenv("SUPERADMIN_DISCORD_ID", "").split(",") if s.strip()]
+DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
+if not DISCORD_BOT_TOKEN:
+    raise RuntimeError("DISCORD_BOT_TOKEN is not set")
+STAFF_ROLE_ID = os.getenv("STAFF_ROLE_ID")
+if not STAFF_ROLE_ID:
+    raise RuntimeError("STAFF_ROLE_ID is not set")
+_superadmins = os.getenv("SUPERADMIN_DISCORD_ID")
+if not _superadmins:
+    raise RuntimeError("SUPERADMIN_DISCORD_ID is not set")
+SUPERADMIN_LIST = [s.strip() for s in _superadmins.split(",") if s.strip()]
 
 async def get_current_discord_id(request: Request) -> str:
     token = request.cookies.get("session_token")
@@ -22,8 +31,6 @@ async def get_current_discord_id(request: Request) -> str:
         raise HTTPException(status_code=401, detail="Invalid session")
 
 async def require_staff(request: Request, guild_id: str, discord_id: str = Depends(get_current_discord_id)):
-    if not DISCORD_BOT_TOKEN:
-        raise HTTPException(status_code=500, detail="Bot token not configured")
     async with httpx.AsyncClient(timeout=15.0) as client:
         member_res = await client.get(
             f"https://discord.com/api/guilds/{guild_id}/members/{discord_id}",
@@ -38,8 +45,6 @@ async def require_staff(request: Request, guild_id: str, discord_id: str = Depen
     return True
 
 async def require_superadmin(discord_id: str = Depends(get_current_discord_id)):
-    if not SUPERADMIN_LIST:
-        raise HTTPException(status_code=500, detail="SUPERADMIN_DISCORD_ID not configured")
     if discord_id not in SUPERADMIN_LIST:
         raise HTTPException(status_code=403, detail="Superadmin required")
     return True

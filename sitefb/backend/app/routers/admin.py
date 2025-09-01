@@ -9,7 +9,9 @@ from ..database import get_db
 from ..models import DiscordConfig
 from ..security import require_superadmin
 
-DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN", "")
+DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
+if not DISCORD_BOT_TOKEN:
+    raise RuntimeError("DISCORD_BOT_TOKEN is not set")
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
@@ -39,8 +41,6 @@ async def set_discord_config(body: dict, db: Session = Depends(get_db), _=Depend
 
 @router.get("/guild-roles/{guild_id}")
 async def guild_roles(guild_id: str, _=Depends(require_superadmin)):
-    if not DISCORD_BOT_TOKEN:
-        raise HTTPException(status_code=500, detail="Bot token not configured")
     async with httpx.AsyncClient(timeout=15.0) as client:
         res = await client.get(
             f"https://discord.com/api/guilds/{guild_id}/roles",

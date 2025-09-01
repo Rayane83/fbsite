@@ -13,23 +13,42 @@ from sqlalchemy.orm import Session
 from .database import get_db
 from .models import User
 
-JWT_SECRET = os.getenv("JWT_SECRET", secrets.token_urlsafe(32))
+JWT_SECRET = os.getenv("JWT_SECRET")
+if not JWT_SECRET:
+    raise RuntimeError("JWT_SECRET is not set")
 JWT_ALG = "HS256"
-JWT_EXPIRE_HOURS = int(os.getenv("JWT_EXPIRE_HOURS", "24"))
-DISCORD_CLIENT_ID = os.getenv("DISCORD_CLIENT_ID", "")
-DISCORD_CLIENT_SECRET = os.getenv("DISCORD_CLIENT_SECRET", "")
-DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN", "")
-REDIRECT_URI_PROD = os.getenv("REDIRECT_URI_PROD", "")
-REDIRECT_URI_DEV = os.getenv("REDIRECT_URI_DEV", "http://localhost:5173/api/auth/discord/callback")
-ENV = os.getenv("ENV", "dev")
+JWT_EXPIRE_HOURS = os.getenv("JWT_EXPIRE_HOURS")
+if not JWT_EXPIRE_HOURS:
+    raise RuntimeError("JWT_EXPIRE_HOURS is not set")
+JWT_EXPIRE_HOURS = int(JWT_EXPIRE_HOURS)
+DISCORD_CLIENT_ID = os.getenv("DISCORD_CLIENT_ID")
+if not DISCORD_CLIENT_ID:
+    raise RuntimeError("DISCORD_CLIENT_ID is not set")
+DISCORD_CLIENT_SECRET = os.getenv("DISCORD_CLIENT_SECRET")
+if not DISCORD_CLIENT_SECRET:
+    raise RuntimeError("DISCORD_CLIENT_SECRET is not set")
+DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
+if not DISCORD_BOT_TOKEN:
+    raise RuntimeError("DISCORD_BOT_TOKEN is not set")
+REDIRECT_URI_PROD = os.getenv("REDIRECT_URI_PROD")
+if not REDIRECT_URI_PROD:
+    raise RuntimeError("REDIRECT_URI_PROD is not set")
+REDIRECT_URI_DEV = os.getenv("REDIRECT_URI_DEV")
+if not REDIRECT_URI_DEV:
+    raise RuntimeError("REDIRECT_URI_DEV is not set")
+ENV = os.getenv("ENV")
+if not ENV:
+    raise RuntimeError("ENV is not set")
 REDIRECT_URI = REDIRECT_URI_PROD if ENV == "prod" else REDIRECT_URI_DEV
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+FRONTEND_URL = os.getenv("FRONTEND_URL")
+if not FRONTEND_URL:
+    raise RuntimeError("FRONTEND_URL is not set")
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
+if not ENCRYPTION_KEY:
+    raise RuntimeError("ENCRYPTION_KEY is not set")
 
 from cryptography.fernet import Fernet
 
-if not ENCRYPTION_KEY:
-    ENCRYPTION_KEY = base64.urlsafe_b64encode(os.urandom(32)).decode()
 fernet = Fernet(ENCRYPTION_KEY.encode())
 
 def encrypt_token(token: str) -> str:

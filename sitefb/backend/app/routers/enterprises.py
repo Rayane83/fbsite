@@ -11,7 +11,9 @@ from ..database import get_db
 from ..models import Enterprise
 from ..security import require_staff
 
-DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN", "")
+DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
+if not DISCORD_BOT_TOKEN:
+    raise RuntimeError("DISCORD_BOT_TOKEN is not set")
 
 router = APIRouter(prefix="/api/enterprises", tags=["enterprises"])
 
@@ -64,8 +66,6 @@ async def delete_enterprise(guild_id: int, key: str, db: Session = Depends(get_d
 
 @router.get("/extract/{guild_id}")
 async def extract_from_roles(guild_id: int, db: Session = Depends(get_db), _=Depends(require_staff)):
-    if not DISCORD_BOT_TOKEN:
-        raise HTTPException(status_code=500, detail="Bot token not configured")
     async with httpx.AsyncClient(timeout=20.0) as client:
         roles_res = await client.get(
             f"https://discord.com/api/guilds/{guild_id}/roles",
