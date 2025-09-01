@@ -1,22 +1,29 @@
-# Installation en 1 commande (VPS Ubuntu/Debian)
+# Installation (VPS) — npm ou script unique
 
-1) Se connecter en root ou sudoer, puis cloner le repo et lancer le script:
+## Variante FULL NPM (recommandée si vous préférez npm)
 
+1) Root & code
 ```
-sudo su -
+sudo -i
 cd /opt
 git clone git@github.com:Rayane83/sitefb.git
-cd sitefb/scripts
-bash install_sitefb.sh --domain flashbackfa-entreprise.fr --branch feature/ui-shadcn --db-url "mysql+pymysql://Staff:Fbentreprise83@@51.75.200.221:3306/Sitefb" --email votre_email@domaine.fr
+cd sitefb
+git fetch origin && git checkout feature/ui-shadcn && git pull origin feature/ui-shadcn
+cd scripts
 ```
 
-2) Le script vous demandera les secrets Discord (Client ID/Secret/Bot Token). Il générera automatiquement JWT_SECRET et ENCRYPTION_KEY.
+2) Lancer l'installateur npm
+```
+bash install_sitefb_npm.sh --domain flashbackfa-entreprise.fr \
+  --branch feature/ui-shadcn \
+  --db-url "mysql+pymysql://Staff:Fbentreprise83%40@51.75.200.221:3306/Sitefb" \
+  --email votre_email@domaine.fr
+```
+Il vous demandera DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, DISCORD_BOT_TOKEN. Il génère JWT_SECRET et ENCRYPTION_KEY.
 
-3) Une fois terminé:
-- Frontend: https://flashbackfa-entreprise.fr
-- Backend (interne): http://127.0.0.1:8001/api/health
+3) Vérifier
+- https://flashbackfa-entreprise.fr
+- curl http://127.0.0.1:8001/api/health
 
-En cas de besoin:
-- Relancer backend: `docker compose -f /opt/sitefb/docker-compose.yml up -d`
-- Logs backend: `docker compose -f /opt/sitefb/docker-compose.yml logs -f backend`
-- Certbot manuel: `certbot --nginx -d flashbackfa-entreprise.fr -m votre_email@domaine.fr --agree-tos --redirect`
+## Variante Docker + yarn (existante)
+Voir install_sitefb.sh si vous préférez yarn via conteneur.
