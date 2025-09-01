@@ -2,53 +2,26 @@
 
 Stack: FastAPI + MySQL (SQLAlchemy + Alembic) + Vite React TypeScript (à venir)
 
-## Démarrage rapide (Docker)
+## Démarrage rapide
 
-1. Créez un fichier backend/.env basé sur backend/.env.example (renseignez DISCORD_* et secrets):
-
-```
-cp backend/.env.example backend/.env
-```
-
-2. Lancez Docker (les variables de `backend/.env` sont chargées automatiquement):
+1. Lancez le script de configuration qui installera les dépendances, demandera les variables d'environnement et démarrera le serveur:
 
 ```
-docker compose up --build
+./scripts/setup.sh
 ```
 
 - API: http://localhost:8001
 - Santé: GET http://localhost:8001/api/health
 
-3. MySQL (conteneur db)
-- Host: localhost
-- Port: 3306
-- Database: Sitefb
-- User: Staff
-- Password: Fbentreprise83@
+## Variables d'environnement backend
 
-## Endpoints déjà présents
-- Auth Discord:
-  - GET /api/auth/discord/login -> renvoie l'URL d'autorisation (Authorization Code + PKCE)
-  - GET /api/auth/discord/callback -> échange code contre tokens, crée/maj utilisateur, met cookie de session, redirige FRONTEND_URL
-  - GET /api/auth/discord/me -> renvoie le profil utilisateur connecté
-  - POST /api/auth/discord/logout -> supprime le cookie de session
-
-- Dotations:
-  - GET /api/dotation/{guild_id}?entreprise=XYZ -> récupère dotation et lignes
-  - POST /api/dotation/{guild_id} -> sauvegarde dotation + calcule salaire/prime par paliers
-
-- Dashboard:
-  - GET /api/dashboard/summary/{guild_id}?entreprise=XYZ
-  - GET /api/dashboard/employee-count/{guild_id}?entreprise=XYZ
-
-## Variables d'environnement backend (.env)
-
-Voir `backend/.env.example`. Champs clés:
-- DATABASE_URL=mysql+pymysql://Staff:...@51.75.200.221:3306/Sitefb
+Le script crée le fichier `backend/.env` avec les champs suivants:
+- DATABASE_URL
 - DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, DISCORD_BOT_TOKEN
-- JWT_SECRET, ENCRYPTION_KEY (générez des valeurs fortes)
+- JWT_SECRET, ENCRYPTION_KEY
 - FRONTEND_URL, REDIRECT_URI_DEV, REDIRECT_URI_PROD
 - CORS_ORIGINS
+- ENV
 
 ## Migrations Alembic
 
