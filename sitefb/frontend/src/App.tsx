@@ -24,6 +24,9 @@ function Header() {
     await fetch(`${API_BASE}/api/auth/discord/logout`, { method: 'POST', credentials: 'include' })
     navigate('/')
   }
+  const [isSuperadmin, setIsSuperadmin] = useState(false)
+  useEffect(()=>{ (async()=>{ try { const r = await fetch(`${API_BASE}/api/admin/discord-config`, { credentials:'include' }); setIsSuperadmin(r.ok) } catch { setIsSuperadmin(false) } })() }, [])
+
   return (
     <header className="border-b border-border">
       <div className="container flex items-center justify-between py-3">
