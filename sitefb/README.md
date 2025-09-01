@@ -10,7 +10,7 @@ Stack: FastAPI + MySQL (SQLAlchemy + Alembic) + Vite React TypeScript (à venir)
 cp backend/.env.example backend/.env
 ```
 
-2. Lancez Docker:
+2. Lancez Docker (les variables de `backend/.env` sont chargées automatiquement):
 
 ```
 docker compose up --build

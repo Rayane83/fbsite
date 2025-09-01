@@ -17,24 +17,12 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    environment:
-      DATABASE_URL: mysql+pymysql://Staff:Fbentreprise83%40@db:3306/Sitefb
-      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
-      DISCORD_CLIENT_SECRET: ${DISCORD_CLIENT_SECRET}
-      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
-      JWT_SECRET: ${JWT_SECRET}
-      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
-      FRONTEND_URL: http://localhost:5173
-      REDIRECT_URI_DEV: http://localhost:5173/api/auth/discord/callback
-      REDIRECT_URI_PROD: https://flashbackfa-entreprise.fr/api/auth/discord/callback
-      CORS_ORIGINS: http://localhost:5173,https://flashbackfa-entreprise.fr
-      ENV: dev
+    env_file:
+      - ./backend/.env
     ports:
       - "8001:8001"
     depends_on:
       - db
-    volumes:
-      - ./backend/.env:/app/.env:ro
 
 volumes:
   db_data:
