@@ -29,7 +29,7 @@ ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
 from cryptography.fernet import Fernet
 
 if not ENCRYPTION_KEY:
-    ENCRYPTION_KEY = base64.urlsafe_b64encode(os.urandom(32)).decode()
+    raise RuntimeError("ENCRYPTION_KEY environment variable is required")
 fernet = Fernet(ENCRYPTION_KEY.encode())
 
 def encrypt_token(token: str) -> str:

@@ -23,6 +23,15 @@ Le script crée le fichier `backend/.env` avec les champs suivants:
 - CORS_ORIGINS
 - ENV
 
+### ENCRYPTION_KEY
+Clé Fernet en base64 (32 octets) utilisée pour chiffrer les tokens.
+Générez-en une avec:
+
+```bash
+python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+```
+
+
 ## Migrations Alembic
 
 Au démarrage, `alembic upgrade head` est exécuté. Pour lancer manuellement:

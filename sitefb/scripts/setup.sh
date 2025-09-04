@@ -9,6 +9,8 @@ if [ ! -f backend/.env ]; then
   read -p "DISCORD_CLIENT_SECRET: " DISCORD_CLIENT_SECRET
   read -p "DISCORD_BOT_TOKEN: " DISCORD_BOT_TOKEN
   read -p "JWT_SECRET: " JWT_SECRET
+  echo "ENCRYPTION_KEY doit être une clé Fernet (base64 de 32 octets)."
+  echo "Générez-en une avec: python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'"
   read -p "ENCRYPTION_KEY: " ENCRYPTION_KEY
   read -p "FRONTEND_URL: " FRONTEND_URL
   read -p "REDIRECT_URI_DEV: " REDIRECT_URI_DEV
