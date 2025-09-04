@@ -67,4 +67,5 @@ def compute_tax(amount: float, brackets: List[Dict[str, Any]], wealth: Optional[
         remaining -= base
     if wealth and amount > float(wealth.get("threshold", 0)):
         tax += (amount - float(wealth["threshold"])) * float(wealth.get("rate", 0))
+        main
     return round(tax, 2)
