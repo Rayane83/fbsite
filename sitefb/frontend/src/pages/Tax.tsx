@@ -4,8 +4,6 @@ import { useApp } from '@/context/AppContext'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 
 type Bracket = { min:number; max?:number; rate:number }
-
-autoFill: any
 export default function TaxPage(){
   const { guildId, entreprise } = useApp()
   const [brackets, setBrackets] = useState<Bracket[]>([])
