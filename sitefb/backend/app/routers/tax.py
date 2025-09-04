@@ -53,18 +53,18 @@ async def set_tax(guild_id: int, cfg: TaxConfig, entreprise: Optional[str] = Non
 def compute_tax(amount: float, brackets: List[Dict[str, Any]], wealth: Optional[Dict[str, Any]] = None) -> float:
     tax = 0.0
     remaining = amount
-    last_max = 0.0
-    for b in sorted(brackets, key=lambda x: x.get('min', 0)):
-        bmin = float(b.get('min', 0))
-        bmax = b.get('max')
-        rate = float(b.get('rate', 0))
+    for b in sorted(brackets, key=lambda x: x.get("min", 0)):
         if remaining <= 0:
             break
-        if bmax is None:
-            base = max(0.0, amount - bmin)
-        else:
-            base = max(0.0, min(amount, float(bmax)) - bmin)
+        bmin = float(b.get("min", 0))
+        bmax = b.get("max")
+        rate = float(b.get("rate", 0))
+        if amount <= bmin:
+            break
+        upper = float(bmax) if bmax is not None else amount
+        base = min(remaining, max(0.0, upper - bmin))
         tax += base * rate
-    if wealth and amount > float(wealth.get('threshold', 0)):
-        tax += (amount - float(wealth['threshold'])) * float(wealth.get('rate', 0))
+        remaining -= base
+    if wealth and amount > float(wealth.get("threshold", 0)):
+        tax += (amount - float(wealth["threshold"])) * float(wealth.get("rate", 0))
     return round(tax, 2)
